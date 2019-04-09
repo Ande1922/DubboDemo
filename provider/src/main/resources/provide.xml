@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+            http://code.alibabatech.com/schema/dubbo
+            http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <context:component-scan base-package="com.springboot.service.*">
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 提供方应用信息，用于计算依赖关系 -->
+    <dubbo:application name="provider"/>
+    <!-- 这里使用的注册中心是zookeeper -->
+    <dubbo:registry protocol="zookeeper" address="${dubbo.registry.center}"/>
+    <dubbo:protocol name="dubbo" port="29104"/>
+    <!-- 将该接口暴露到dubbo中 -->
+    <dubbo:service interface="com.springboot.service.DemoService" ref="demoService" timeout="300000"></dubbo:service>
+
+    <bean id="demoService" class="com.springboot.service.impl.DemoServiceImpl"></bean>
+
+</beans>
